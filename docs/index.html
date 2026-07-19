@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#08121b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Chromashift">
+  <title>Chromashift</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="TemplateData/app-icon.png">
+  <link rel="icon" type="image/png" href="TemplateData/app-icon.png">
+  <link rel="stylesheet" href="TemplateData/style.css">
+</head>
+<body>
+  <main id="unity-container" aria-label="Chromashift">
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <section id="unity-loading" aria-live="polite">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <h1>CHROMASHIFT</h1>
+      <p id="loading-label">ЗАГРУЗКА ИГРЫ</p>
+      <div class="progress-track"><div id="unity-progress"></div></div>
+      <p class="install-note">На iPhone игру можно добавить на экран «Домой» через меню «Поделиться».</p>
+    </section>
+    <div id="unity-warning"></div>
+  </main>
+  <script>
+    window.addEventListener("load", function () {
+      if ("serviceWorker" in navigator) navigator.serviceWorker.register("ServiceWorker.js");
+    });
+
+    const container = document.querySelector("#unity-container");
+    const canvas = document.querySelector("#unity-canvas");
+    const loading = document.querySelector("#unity-loading");
+    const progress = document.querySelector("#unity-progress");
+    const loadingLabel = document.querySelector("#loading-label");
+    const warning = document.querySelector("#unity-warning");
+
+    function showBanner(message, type) {
+      const item = document.createElement("div");
+      item.className = type === "error" ? "error" : "warning";
+      item.textContent = message;
+      warning.appendChild(item);
+      if (type !== "error") setTimeout(() => item.remove(), 6000);
+    }
+
+    const buildUrl = "Build";
+    const loaderUrl = buildUrl + "/WebGL.loader.js";
+    const config = {
+      arguments: [],
+      dataUrl: buildUrl + "/WebGL.data.unityweb",
+      frameworkUrl: buildUrl + "/WebGL.framework.js.unityweb",
+      codeUrl: buildUrl + "/WebGL.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Independent Studio",
+      productName: "Chromashift",
+      productVersion: "0.5.0",
+      showBanner
+    };
+
+    document.addEventListener("contextmenu", event => event.preventDefault());
+    document.addEventListener("touchmove", event => {
+      if (event.target === canvas) event.preventDefault();
+    }, { passive: false });
+
+    const script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, value => {
+        const percent = Math.round(value * 100);
+        progress.style.width = percent + "%";
+        loadingLabel.textContent = "ЗАГРУЗКА ИГРЫ · " + percent + "%";
+      }).then(() => {
+        loading.classList.add("complete");
+        canvas.focus();
+        setTimeout(() => loading.remove(), 450);
+      }).catch(error => {
+        loadingLabel.textContent = "НЕ УДАЛОСЬ ЗАПУСТИТЬ ИГРУ";
+        showBanner(String(error), "error");
+      });
+    };
+    script.onerror = () => showBanner("Не удалось загрузить файлы игры. Проверьте подключение к интернету.", "error");
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

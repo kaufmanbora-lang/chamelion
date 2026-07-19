@@ -1,0 +1,43 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #050a10;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050a10; }
+body { position: fixed; inset: 0; touch-action: none; overscroll-behavior: none; }
+#unity-container { position: fixed; inset: 0; overflow: hidden; background: #050a10; }
+#unity-canvas { display: block; width: 100%; height: 100%; background: #08121b; outline: none; }
+
+#unity-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+           max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  background:
+    radial-gradient(circle at 50% 38%, rgba(38, 205, 179, .19), transparent 30%),
+    linear-gradient(145deg, #07111b 0%, #09131e 44%, #04080d 100%);
+  transition: opacity .35s ease, visibility .35s ease;
+}
+#unity-loading.complete { opacity: 0; visibility: hidden; }
+#unity-loading h1 { margin: 18px 0 8px; font-size: clamp(28px, 5vw, 56px); letter-spacing: .18em; font-weight: 800; }
+#loading-label { margin: 0 0 18px; color: #aab8c7; font-size: 12px; letter-spacing: .14em; font-weight: 700; }
+.progress-track { width: min(360px, 72vw); height: 6px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.10); }
+#unity-progress { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #16a78f, #69f3d4); transition: width .12s linear; }
+.install-note { max-width: 430px; margin: 18px 0 0; color: #718193; text-align: center; font-size: 12px; line-height: 1.45; }
+.brand-mark { display: flex; align-items: end; gap: 7px; height: 54px; transform: skew(-8deg); }
+.brand-mark span { display: block; width: 17px; border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, #74f6d9, #118f7d); box-shadow: 0 0 28px rgba(70, 236, 202, .28); }
+.brand-mark span:nth-child(1) { height: 31px; }
+.brand-mark span:nth-child(2) { height: 52px; }
+.brand-mark span:nth-child(3) { height: 40px; }
+#unity-warning { position: absolute; z-index: 5; top: max(12px, env(safe-area-inset-top)); left: 50%; width: min(720px, 92vw); transform: translateX(-50%); pointer-events: none; }
+#unity-warning > div { margin-bottom: 8px; padding: 12px 16px; border-radius: 10px; color: #fff; background: rgba(169, 113, 14, .96); box-shadow: 0 8px 32px rgba(0,0,0,.35); }
+#unity-warning > .error { background: rgba(163, 42, 43, .97); }
+
+@media (display-mode: standalone) {
+  .install-note { display: none; }
+}

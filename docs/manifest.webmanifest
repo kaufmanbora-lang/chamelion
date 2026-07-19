@@ -1,0 +1,20 @@
+{
+  "name": "Chromashift",
+  "short_name": "Chromashift",
+  "description": "",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#050a10",
+  "theme_color": "#08121b",
+  "icons": [
+    {
+      "src": "TemplateData/app-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

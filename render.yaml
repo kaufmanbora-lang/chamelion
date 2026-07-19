@@ -1,0 +1,63 @@
+services:
+  - type: web
+    name: chromashift-web-game
+    runtime: static
+    plan: free
+    autoDeployTrigger: commit
+    buildCommand: >-
+      test -f site/index.html &&
+      test -f site/manifest.webmanifest &&
+      test -f site/ServiceWorker.js &&
+      test -d site/Build &&
+      test -d site/StreamingAssets &&
+      test -d site/TemplateData
+    staticPublishPath: ./site
+    headers:
+      - path: /Build/*.unityweb
+        name: Content-Encoding
+        value: br
+      - path: /Build/*.wasm.unityweb
+        name: Content-Type
+        value: application/wasm
+      - path: /Build/*.framework.js.unityweb
+        name: Content-Type
+        value: application/javascript
+      - path: /Build/*.data.unityweb
+        name: Content-Type
+        value: application/octet-stream
+      - path: /Build/*.loader.js
+        name: Content-Type
+        value: application/javascript; charset=utf-8
+      - path: /manifest.webmanifest
+        name: Content-Type
+        value: application/manifest+json; charset=utf-8
+      - path: /ServiceWorker.js
+        name: Content-Type
+        value: application/javascript; charset=utf-8
+      - path: /Build/*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /TemplateData/*
+        name: Cache-Control
+        value: public, max-age=3600, must-revalidate
+      - path: /StreamingAssets/*
+        name: Cache-Control
+        value: no-cache, must-revalidate
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /manifest.webmanifest
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /ServiceWorker.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
