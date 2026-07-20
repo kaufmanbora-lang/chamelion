@@ -1,5 +1,5 @@
 const cachePrefix = "chromashift-shell-";
-const cacheName = cachePrefix + "0.6.0";
+const cacheName = cachePrefix + "0.6.1";
 const shell = ["./", "index.html", "manifest.webmanifest", "TemplateData/style.css", "TemplateData/app-icon.png"];
 
 self.addEventListener("install", event => {
